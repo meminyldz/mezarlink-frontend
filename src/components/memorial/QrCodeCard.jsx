@@ -2,8 +2,12 @@ import { QRCodeCanvas } from "qrcode.react";
 
 // `slug`'a göre /m/:slug adresine giden QR kod üretir.
 // Mezar taşına yapıştırılacak fiziksel etiket için PNG indirme imkanı sunar.
+//
+// GECICI: mezarlink.com domain'i henuz satin alinmadigi icin QR kod
+// Vercel'in verdigi gercek adrese yonlendiriliyor. Domain alinip baglaninca
+// bu satiri "https://www.mezarlink.com/m/${slug}" olarak geri degistir.
 function QrCodeCard({ slug, fullName }) {
-  const memorialUrl = `https://www.mezarlink.com/m/${slug}`;
+  const memorialUrl = `https://mezarlink-frontend.vercel.app/m/${slug}`;
 
   const handleDownload = () => {
     const canvas = document.getElementById(`qr-${slug}`);

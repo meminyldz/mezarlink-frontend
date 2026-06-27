@@ -1,18 +1,50 @@
+import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 
+import api from "../api/axios";
 import MemorialHero from "../components/memorial/MemorialHero";
 import Biography from "../components/memorial/Biography";
 import Gallery from "../components/memorial/Gallery";
 import VideoSection from "../components/memorial/VideoSection";
 import DiscoverSection from "../components/memorial/DiscoverSection";
 
-import { getMemorialBySlug } from "../data/mockMemorials";
-
 function MemorialPage() {
   const { slug } = useParams();
-  const memorial = getMemorialBySlug(slug);
+  const [memorial, setMemorial] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [notFound, setNotFound] = useState(false);
 
-  if (!memorial) {
+  useEffect(() => {
+    let isMounted = true;
+    setLoading(true);
+    setNotFound(false);
+
+    api
+      .get(`/memorials/${slug}`)
+      .then((response) => {
+        if (isMounted) setMemorial(response.data);
+      })
+      .catch(() => {
+        if (isMounted) setNotFound(true);
+      })
+      .finally(() => {
+        if (isMounted) setLoading(false);
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [slug]);
+
+  if (loading) {
+    return (
+      <div className="min-h-[60vh] flex items-center justify-center text-gray-500">
+        Yükleniyor...
+      </div>
+    );
+  }
+
+  if (notFound || !memorial) {
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center text-center px-6">
         <h1 className="text-3xl font-bold">Anı sayfası bulunamadı</h1>
@@ -40,7 +72,7 @@ function MemorialPage() {
       />
 
       <div className="max-w-5xl mx-auto px-6">
-        <Biography biography={memorial.biography} />
+        <Biography biography={memorial.biography || "Henüz biyografi eklenmedi."} />
 
         {memorial.photos?.length > 0 && (
           <Gallery photos={memorial.photos} />
