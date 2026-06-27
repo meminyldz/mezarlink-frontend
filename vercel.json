@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "https://mezarlink-backend-production.up.railway.app/api/:path*"
+    }
+  ]
+}
