@@ -1,0 +1,21 @@
+# Bagimliliklar
+node_modules/
+
+# Build ciktisi
+dist/
+build/
+
+# IDE
+.idea/
+*.iml
+
+# OS dosyalari
+.DS_Store
+Thumbs.db
+
+# Ortam degiskenleri
+.env
+.env.local
+
+# Vite cache
+.vite/
